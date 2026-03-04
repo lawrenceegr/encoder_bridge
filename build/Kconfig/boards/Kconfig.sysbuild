@@ -1,0 +1,2 @@
+# Load Sysbuild board Kconfig descriptions.
+osource "/home/marcus/keyboards-firmware/encoder_bridge/boards/others/encoder_bridge/Kconfig.sysbuild"

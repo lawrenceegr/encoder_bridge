@@ -1,0 +1,4 @@
+west:
+  command: /home/marcus/zephyrproject/.venv/bin/west build -b encoder_bridge . -p
+  topdir: /home/marcus/zephyrproject
+  version: 1.4.0

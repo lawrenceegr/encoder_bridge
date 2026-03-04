@@ -1,0 +1,6 @@
+board:
+  name: encoder_bridge
+  full_name: Encoder Bridge Board
+  vendor: others
+  socs:
+    - name: stm32f030x6

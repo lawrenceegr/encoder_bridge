@@ -1,0 +1,68 @@
+#include <zephyr/dt-bindings/input/input-event-codes.h>
+
+/ {
+	qdec0: qdec0 {
+		compatible = "gpio-qdec";
+		gpios = <&gpioa 15 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>,
+			<&gpiob 3 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>;
+		steps-per-period = <4>;
+		zephyr,axis = <INPUT_REL_WHEEL>;
+		sample-time-us = <2000>;
+		idle-timeout-ms = <200>;
+	};
+
+	qdec1: qdec1 {
+		compatible = "gpio-qdec";
+		gpios = <&gpiob 4 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>,
+			<&gpiob 5 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>;
+		steps-per-period = <4>;
+		zephyr,axis = <INPUT_REL_HWHEEL>;
+		sample-time-us = <2000>;
+		idle-timeout-ms = <200>;
+	};
+
+	qdec2: qdec2 {
+		compatible = "gpio-qdec";
+		gpios = <&gpiob 6 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>,
+			<&gpiob 7 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>;
+		steps-per-period = <4>;
+		zephyr,axis = <INPUT_REL_DIAL>;
+		sample-time-us = <2000>;
+		idle-timeout-ms = <200>;
+	};
+
+	dir_outputs: dir_outputs {
+		compatible = "gpio-leds";
+
+		ccw1: ccw_1 {
+			gpios = <&gpioa 4 GPIO_ACTIVE_LOW>;
+		};
+		cw1: cw_1 {
+			gpios = <&gpioa 5 GPIO_ACTIVE_LOW>;
+		};
+		ccw2: ccw_2 {
+			gpios = <&gpioa 6 GPIO_ACTIVE_LOW>;
+		};
+		cw2: cw_2 {
+			gpios = <&gpioa 7 GPIO_ACTIVE_LOW>;
+		};
+		ccw3: ccw_3 {
+			gpios = <&gpiob 0 GPIO_ACTIVE_LOW>;
+		};
+		cw3: cw_3 {
+			gpios = <&gpiob 1 GPIO_ACTIVE_LOW>;
+		};
+	};
+
+	aliases {
+		encoder-0 = &qdec0;
+		encoder-1 = &qdec1;
+		encoder-2 = &qdec2;
+		ccw-1 = &ccw1;
+		cw-1 = &cw1;
+		ccw-2 = &ccw2;
+		cw-2 = &cw2;
+		ccw-3 = &ccw3;
+		cw-3 = &cw3;
+	};
+};

@@ -1,0 +1,580 @@
+/dts-v1/;
+
+/* node '/' defined in zephyr/dts/common/skeleton.dtsi:9 */
+/ {
+	#address-cells = < 0x1 >;       /* in zephyr/dts/common/skeleton.dtsi:10 */
+	#size-cells = < 0x1 >;          /* in zephyr/dts/common/skeleton.dtsi:11 */
+	model = "Encoder Bridge Board"; /* in ../keyboards-firmware/encoder_bridge/boards/others/encoder_bridge/encoder_bridge.dts:6 */
+	compatible = "st,stm32f030k6t"; /* in ../keyboards-firmware/encoder_bridge/boards/others/encoder_bridge/encoder_bridge.dts:7 */
+
+	/* node '/chosen' defined in zephyr/dts/common/skeleton.dtsi:12 */
+	chosen {
+		zephyr,flash-controller = &flash; /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:23 */
+		zephyr,console = &usart1;         /* in ../keyboards-firmware/encoder_bridge/boards/others/encoder_bridge/encoder_bridge.dts:10 */
+		zephyr,shell-uart = &usart1;      /* in ../keyboards-firmware/encoder_bridge/boards/others/encoder_bridge/encoder_bridge.dts:11 */
+		zephyr,sram = &sram0;             /* in ../keyboards-firmware/encoder_bridge/boards/others/encoder_bridge/encoder_bridge.dts:12 */
+		zephyr,flash = &flash0;           /* in ../keyboards-firmware/encoder_bridge/boards/others/encoder_bridge/encoder_bridge.dts:13 */
+	};
+
+	/* node '/aliases' defined in zephyr/dts/common/skeleton.dtsi:13 */
+	aliases {
+		encoder-0 = &qdec0; /* in ../keyboards-firmware/encoder_bridge/app.overlay:58 */
+		encoder-1 = &qdec1; /* in ../keyboards-firmware/encoder_bridge/app.overlay:59 */
+		encoder-2 = &qdec2; /* in ../keyboards-firmware/encoder_bridge/app.overlay:60 */
+		ccw-1 = &ccw1;      /* in ../keyboards-firmware/encoder_bridge/app.overlay:61 */
+		cw-1 = &cw1;        /* in ../keyboards-firmware/encoder_bridge/app.overlay:62 */
+		ccw-2 = &ccw2;      /* in ../keyboards-firmware/encoder_bridge/app.overlay:63 */
+		cw-2 = &cw2;        /* in ../keyboards-firmware/encoder_bridge/app.overlay:64 */
+		ccw-3 = &ccw3;      /* in ../keyboards-firmware/encoder_bridge/app.overlay:65 */
+		cw-3 = &cw3;        /* in ../keyboards-firmware/encoder_bridge/app.overlay:66 */
+	};
+
+	/* node '/soc' defined in zephyr/dts/arm/armv6-m.dtsi:6 */
+	soc {
+		#address-cells = < 0x1 >;     /* in zephyr/dts/arm/armv6-m.dtsi:7 */
+		#size-cells = < 0x1 >;        /* in zephyr/dts/arm/armv6-m.dtsi:8 */
+		interrupt-parent = < &nvic >; /* in zephyr/dts/arm/armv6-m.dtsi:10 */
+		ranges;                       /* in zephyr/dts/arm/armv6-m.dtsi:11 */
+		compatible = "st,stm32f030",
+		             "st,stm32f0",
+		             "simple-bus";    /* in zephyr/dts/arm/st/f0/stm32f030.dtsi:11 */
+
+		/* node '/soc/interrupt-controller@e000e100' defined in zephyr/dts/arm/armv6-m.dtsi:13 */
+		nvic: interrupt-controller@e000e100 {
+			#address-cells = < 0x1 >;            /* in zephyr/dts/arm/armv6-m.dtsi:14 */
+			compatible = "arm,v6m-nvic";         /* in zephyr/dts/arm/armv6-m.dtsi:15 */
+			reg = < 0xe000e100 0xc00 >;          /* in zephyr/dts/arm/armv6-m.dtsi:16 */
+			interrupt-controller;                /* in zephyr/dts/arm/armv6-m.dtsi:17 */
+			#interrupt-cells = < 0x2 >;          /* in zephyr/dts/arm/armv6-m.dtsi:18 */
+			arm,num-irq-priority-bits = < 0x2 >; /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:384 */
+			phandle = < 0x1 >;                   /* in zephyr/dts/arm/armv6-m.dtsi:10 */
+		};
+
+		/* node '/soc/timer@e000e010' defined in zephyr/dts/arm/armv6-m.dtsi:21 */
+		systick: timer@e000e010 {
+			compatible = "arm,armv6m-systick"; /* in zephyr/dts/arm/armv6-m.dtsi:22 */
+			reg = < 0xe000e010 0x10 >;         /* in zephyr/dts/arm/armv6-m.dtsi:23 */
+		};
+
+		/* node '/soc/flash-controller@40022000' defined in zephyr/dts/arm/st/f0/stm32f0.dtsi:85 */
+		flash: flash-controller@40022000 {
+			compatible = "st,stm32-flash-controller",
+			             "st,stm32f1-flash-controller"; /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:86 */
+			reg = < 0x40022000 0x400 >;                 /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:87 */
+			interrupts = < 0x3 0x0 >;                   /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:88 */
+			clocks = < &rcc 0x14 0x10 >;                /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:89 */
+			#address-cells = < 0x1 >;                   /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:91 */
+			#size-cells = < 0x1 >;                      /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:92 */
+
+			/* node '/soc/flash-controller@40022000/flash@8000000' defined in zephyr/dts/arm/st/f0/stm32f0.dtsi:94 */
+			flash0: flash@8000000 {
+				compatible = "st,stm32-nv-flash",
+				             "soc-nv-flash";      /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:95 */
+				erase-block-size = < 0x400 >;     /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:96 */
+				write-block-size = < 0x2 >;       /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:97 */
+				max-erase-time = < 0x28 >;        /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:99 */
+				reg = < 0x8000000 0x8000 >;       /* in zephyr/dts/arm/st/f0/stm32f030X6.dtsi:18 */
+			};
+		};
+
+		/* node '/soc/rcc@40021000' defined in zephyr/dts/arm/st/f0/stm32f0.dtsi:103 */
+		rcc: rcc@40021000 {
+			compatible = "st,stm32f0-rcc";   /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:104 */
+			#clock-cells = < 0x2 >;          /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:105 */
+			reg = < 0x40021000 0x400 >;      /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:106 */
+			clocks = < &pll >;               /* in ../keyboards-firmware/encoder_bridge/boards/others/encoder_bridge/encoder_bridge.dts:30 */
+			clock-frequency = < 0x2dc6c00 >; /* in ../keyboards-firmware/encoder_bridge/boards/others/encoder_bridge/encoder_bridge.dts:31 */
+			ahb-prescaler = < 0x1 >;         /* in ../keyboards-firmware/encoder_bridge/boards/others/encoder_bridge/encoder_bridge.dts:32 */
+			apb1-prescaler = < 0x1 >;        /* in ../keyboards-firmware/encoder_bridge/boards/others/encoder_bridge/encoder_bridge.dts:33 */
+			phandle = < 0x2 >;               /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:89 */
+
+			/* node '/soc/rcc@40021000/reset-controller' defined in zephyr/dts/arm/st/f0/stm32f0.dtsi:108 */
+			rctl: reset-controller {
+				compatible = "st,stm32-rcc-rctl"; /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:109 */
+				#reset-cells = < 0x1 >;           /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:110 */
+				phandle = < 0x4 >;                /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:178 */
+			};
+		};
+
+		/* node '/soc/interrupt-controller@40010400' defined in zephyr/dts/arm/st/f0/stm32f0.dtsi:114 */
+		exti: interrupt-controller@40010400 {
+			compatible = "st,stm32-exti"; /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:115 */
+			interrupt-controller;         /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:116 */
+			#interrupt-cells = < 0x1 >;   /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:117 */
+			#address-cells = < 0x1 >;     /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:118 */
+			reg = < 0x40010400 0x400 >;   /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:119 */
+			clocks = < &rcc 0x18 0x1 >;   /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:120 */
+			num-lines = < 0x20 >;         /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:121 */
+			interrupts = < 0x5 0x0 >,
+			             < 0x6 0x0 >,
+			             < 0x7 0x0 >;     /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:122 */
+			interrupt-names = "line0-1",
+			                  "line2-3",
+			                  "line4-15"; /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:123 */
+			line-ranges = < 0x0 0x2 >,
+			              < 0x2 0x2 >,
+			              < 0x4 0xc >;    /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:124 */
+		};
+
+		/* node '/soc/pin-controller@48000000' defined in zephyr/dts/arm/st/f0/stm32f0.dtsi:127 */
+		pinctrl: pin-controller@48000000 {
+			compatible = "st,stm32-pinctrl"; /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:128 */
+			#address-cells = < 0x1 >;        /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:129 */
+			#size-cells = < 0x1 >;           /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:130 */
+			reg = < 0x48000000 0x1800 >;     /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:131 */
+
+			/* node '/soc/pin-controller@48000000/gpio@48000000' defined in zephyr/dts/arm/st/f0/stm32f0.dtsi:133 */
+			gpioa: gpio@48000000 {
+				compatible = "st,stm32-gpio";   /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:134 */
+				gpio-controller;                /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:135 */
+				#gpio-cells = < 0x2 >;          /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:136 */
+				reg = < 0x48000000 0x400 >;     /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:137 */
+				clocks = < &rcc 0x14 0x20000 >; /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:138 */
+				status = "okay";                /* in ../keyboards-firmware/encoder_bridge/boards/others/encoder_bridge/encoder_bridge.dts:37 */
+				phandle = < 0xa >;              /* in ../keyboards-firmware/encoder_bridge/app.overlay:6 */
+			};
+
+			/* node '/soc/pin-controller@48000000/gpio@48000400' defined in zephyr/dts/arm/st/f0/stm32f0.dtsi:141 */
+			gpiob: gpio@48000400 {
+				compatible = "st,stm32-gpio";   /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:142 */
+				gpio-controller;                /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:143 */
+				#gpio-cells = < 0x2 >;          /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:144 */
+				reg = < 0x48000400 0x400 >;     /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:145 */
+				clocks = < &rcc 0x14 0x40000 >; /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:146 */
+				status = "okay";                /* in ../keyboards-firmware/encoder_bridge/boards/others/encoder_bridge/encoder_bridge.dts:41 */
+				phandle = < 0xb >;              /* in ../keyboards-firmware/encoder_bridge/app.overlay:6 */
+			};
+
+			/* node '/soc/pin-controller@48000000/gpio@48000800' defined in zephyr/dts/arm/st/f0/stm32f0.dtsi:149 */
+			gpioc: gpio@48000800 {
+				compatible = "st,stm32-gpio";   /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:150 */
+				gpio-controller;                /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:151 */
+				#gpio-cells = < 0x2 >;          /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:152 */
+				reg = < 0x48000800 0x400 >;     /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:153 */
+				clocks = < &rcc 0x14 0x80000 >; /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:154 */
+			};
+
+			/* node '/soc/pin-controller@48000000/gpio@48000c00' defined in zephyr/dts/arm/st/f0/stm32f0.dtsi:157 */
+			gpiod: gpio@48000c00 {
+				compatible = "st,stm32-gpio";    /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:158 */
+				gpio-controller;                 /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:159 */
+				#gpio-cells = < 0x2 >;           /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:160 */
+				reg = < 0x48000c00 0x400 >;      /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:161 */
+				clocks = < &rcc 0x14 0x100000 >; /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:162 */
+			};
+
+			/* node '/soc/pin-controller@48000000/gpio@48001400' defined in zephyr/dts/arm/st/f0/stm32f0.dtsi:165 */
+			gpiof: gpio@48001400 {
+				compatible = "st,stm32-gpio";    /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:166 */
+				gpio-controller;                 /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:167 */
+				#gpio-cells = < 0x2 >;           /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:168 */
+				reg = < 0x48001400 0x400 >;      /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:169 */
+				clocks = < &rcc 0x14 0x400000 >; /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:170 */
+				status = "okay";                 /* in ../keyboards-firmware/encoder_bridge/boards/others/encoder_bridge/encoder_bridge.dts:45 */
+			};
+
+			/* node '/soc/pin-controller@48000000/usart1_rx_pa10' defined in modules/hal/stm32/dts/st/f0/stm32f030k6tx-pinctrl.dtsi:397 */
+			usart1_rx_pa10: usart1_rx_pa10 {
+				pinmux = < 0x141 >; /* in modules/hal/stm32/dts/st/f0/stm32f030k6tx-pinctrl.dtsi:398 */
+				phandle = < 0x6 >;  /* in ../keyboards-firmware/encoder_bridge/boards/others/encoder_bridge/encoder_bridge.dts:49 */
+			};
+
+			/* node '/soc/pin-controller@48000000/usart1_tx_pa9' defined in modules/hal/stm32/dts/st/f0/stm32f030k6tx-pinctrl.dtsi:416 */
+			usart1_tx_pa9: usart1_tx_pa9 {
+				pinmux = < 0x121 >; /* in modules/hal/stm32/dts/st/f0/stm32f030k6tx-pinctrl.dtsi:417 */
+				bias-pull-up;       /* in modules/hal/stm32/dts/st/f0/stm32f030k6tx-pinctrl.dtsi:418 */
+				phandle = < 0x5 >;  /* in ../keyboards-firmware/encoder_bridge/boards/others/encoder_bridge/encoder_bridge.dts:49 */
+			};
+		};
+
+		/* node '/soc/serial@40013800' defined in zephyr/dts/arm/st/f0/stm32f0.dtsi:174 */
+		usart1: serial@40013800 {
+			compatible = "st,stm32-usart",
+			             "st,stm32-uart";                   /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:175 */
+			reg = < 0x40013800 0x400 >;                     /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:176 */
+			clocks = < &rcc 0x18 0x4000 >;                  /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:177 */
+			resets = < &rctl 0x18e >;                       /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:178 */
+			interrupts = < 0x1b 0x0 >;                      /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:179 */
+			pinctrl-0 = < &usart1_tx_pa9 &usart1_rx_pa10 >; /* in ../keyboards-firmware/encoder_bridge/boards/others/encoder_bridge/encoder_bridge.dts:49 */
+			pinctrl-names = "default";                      /* in ../keyboards-firmware/encoder_bridge/boards/others/encoder_bridge/encoder_bridge.dts:50 */
+			current-speed = < 0x1c200 >;                    /* in ../keyboards-firmware/encoder_bridge/boards/others/encoder_bridge/encoder_bridge.dts:51 */
+			status = "okay";                                /* in ../keyboards-firmware/encoder_bridge/boards/others/encoder_bridge/encoder_bridge.dts:52 */
+		};
+
+		/* node '/soc/i2c@40005400' defined in zephyr/dts/arm/st/f0/stm32f0.dtsi:183 */
+		i2c1: i2c@40005400 {
+			compatible = "st,stm32-i2c-v2";  /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:184 */
+			clock-frequency = < 0x186a0 >;   /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:185 */
+			#address-cells = < 0x1 >;        /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:186 */
+			#size-cells = < 0x0 >;           /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:187 */
+			reg = < 0x40005400 0x400 >;      /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:188 */
+			clocks = < &rcc 0x1c 0x200000 >,
+			         < &rcc 0x1 0x8440030 >; /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:189 */
+			interrupts = < 0x17 0x0 >;       /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:194 */
+			interrupt-names = "combined";    /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:195 */
+			status = "disabled";             /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:196 */
+			phandle = < 0x9 >;               /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:378 */
+		};
+
+		/* node '/soc/spi@40013000' defined in zephyr/dts/arm/st/f0/stm32f0.dtsi:199 */
+		spi1: spi@40013000 {
+			compatible = "st,stm32-spi-fifo",
+			             "st,stm32-spi";      /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:200 */
+			#address-cells = < 0x1 >;         /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:201 */
+			#size-cells = < 0x0 >;            /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:202 */
+			reg = < 0x40013000 0x400 >;       /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:203 */
+			clocks = < &rcc 0x18 0x1000 >;    /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:204 */
+			interrupts = < 0x19 0x3 >;        /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:205 */
+			status = "disabled";              /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:206 */
+		};
+
+		/* node '/soc/rtc@40002800' defined in zephyr/dts/arm/st/f0/stm32f0.dtsi:209 */
+		rtc: rtc@40002800 {
+			compatible = "st,stm32-rtc";       /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:210 */
+			reg = < 0x40002800 0x400 >;        /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:211 */
+			clocks = < &rcc 0x1c 0x10000000 >; /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:212 */
+			interrupts = < 0x2 0x0 >;          /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:213 */
+			prescaler = < 0x8000 >;            /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:214 */
+			alarms-count = < 0x1 >;            /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:215 */
+			alrm-exti-line = < 0x11 >;         /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:216 */
+			status = "disabled";               /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:217 */
+		};
+
+		/* node '/soc/watchdog@40003000' defined in zephyr/dts/arm/st/f0/stm32f0.dtsi:220 */
+		iwdg: watchdog@40003000 {
+			compatible = "st,stm32-watchdog"; /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:221 */
+			reg = < 0x40003000 0x400 >;       /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:222 */
+			status = "disabled";              /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:223 */
+		};
+
+		/* node '/soc/watchdog@40002c00' defined in zephyr/dts/arm/st/f0/stm32f0.dtsi:226 */
+		wwdg: watchdog@40002c00 {
+			compatible = "st,stm32-window-watchdog"; /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:227 */
+			reg = < 0x40002c00 0x400 >;              /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:228 */
+			clocks = < &rcc 0x1c 0x800 >;            /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:229 */
+			interrupts = < 0x0 0x2 >;                /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:230 */
+			status = "disabled";                     /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:231 */
+		};
+
+		/* node '/soc/timers@40012c00' defined in zephyr/dts/arm/st/f0/stm32f0.dtsi:234 */
+		timers1: timers@40012c00 {
+			compatible = "st,stm32-timers";     /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:235 */
+			reg = < 0x40012c00 0x400 >;         /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:236 */
+			clocks = < &rcc 0x18 0x800 >;       /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:237 */
+			resets = < &rctl 0x18b >;           /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:238 */
+			interrupts = < 0xd 0x0 >,
+			             < 0xe 0x0 >;           /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:239 */
+			interrupt-names = "brk_up_trg_com",
+			                  "cc";             /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:240 */
+			st,prescaler = < 0x0 >;             /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:241 */
+			status = "disabled";                /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:242 */
+
+			/* node '/soc/timers@40012c00/pwm' defined in zephyr/dts/arm/st/f0/stm32f0.dtsi:244 */
+			pwm {
+				compatible = "st,stm32-pwm"; /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:245 */
+				status = "disabled";         /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:246 */
+				#pwm-cells = < 0x3 >;        /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:247 */
+			};
+		};
+
+		/* node '/soc/timers@40000400' defined in zephyr/dts/arm/st/f0/stm32f0.dtsi:251 */
+		timers3: timers@40000400 {
+			compatible = "st,stm32-timers"; /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:252 */
+			reg = < 0x40000400 0x400 >;     /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:253 */
+			clocks = < &rcc 0x1c 0x2 >;     /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:254 */
+			resets = < &rctl 0x201 >;       /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:255 */
+			interrupts = < 0x10 0x0 >;      /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:256 */
+			interrupt-names = "global";     /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:257 */
+			st,prescaler = < 0x0 >;         /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:258 */
+			status = "disabled";            /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:259 */
+
+			/* node '/soc/timers@40000400/pwm' defined in zephyr/dts/arm/st/f0/stm32f0.dtsi:261 */
+			pwm {
+				compatible = "st,stm32-pwm"; /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:262 */
+				status = "disabled";         /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:263 */
+				#pwm-cells = < 0x3 >;        /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:264 */
+			};
+
+			/* node '/soc/timers@40000400/counter' defined in zephyr/dts/arm/st/f0/stm32f0.dtsi:267 */
+			counter {
+				compatible = "st,stm32-counter"; /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:268 */
+				status = "disabled";             /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:269 */
+			};
+		};
+
+		/* node '/soc/timers@40002000' defined in zephyr/dts/arm/st/f0/stm32f0.dtsi:273 */
+		timers14: timers@40002000 {
+			compatible = "st,stm32-timers"; /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:274 */
+			reg = < 0x40002000 0x400 >;     /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:275 */
+			clocks = < &rcc 0x1c 0x100 >;   /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:276 */
+			resets = < &rctl 0x208 >;       /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:277 */
+			interrupts = < 0x13 0x0 >;      /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:278 */
+			interrupt-names = "global";     /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:279 */
+			st,prescaler = < 0x0 >;         /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:280 */
+			status = "disabled";            /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:281 */
+
+			/* node '/soc/timers@40002000/pwm' defined in zephyr/dts/arm/st/f0/stm32f0.dtsi:283 */
+			pwm {
+				compatible = "st,stm32-pwm"; /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:284 */
+				status = "disabled";         /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:285 */
+				#pwm-cells = < 0x3 >;        /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:286 */
+			};
+
+			/* node '/soc/timers@40002000/counter' defined in zephyr/dts/arm/st/f0/stm32f0.dtsi:289 */
+			counter {
+				compatible = "st,stm32-counter"; /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:290 */
+				status = "disabled";             /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:291 */
+			};
+		};
+
+		/* node '/soc/timers@40014400' defined in zephyr/dts/arm/st/f0/stm32f0.dtsi:295 */
+		timers16: timers@40014400 {
+			compatible = "st,stm32-timers"; /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:296 */
+			reg = < 0x40014400 0x400 >;     /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:297 */
+			clocks = < &rcc 0x18 0x20000 >; /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:298 */
+			resets = < &rctl 0x191 >;       /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:299 */
+			interrupts = < 0x15 0x0 >;      /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:300 */
+			interrupt-names = "global";     /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:301 */
+			st,prescaler = < 0x0 >;         /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:302 */
+			status = "disabled";            /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:303 */
+
+			/* node '/soc/timers@40014400/pwm' defined in zephyr/dts/arm/st/f0/stm32f0.dtsi:305 */
+			pwm {
+				compatible = "st,stm32-pwm"; /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:306 */
+				status = "disabled";         /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:307 */
+				#pwm-cells = < 0x3 >;        /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:308 */
+			};
+
+			/* node '/soc/timers@40014400/counter' defined in zephyr/dts/arm/st/f0/stm32f0.dtsi:311 */
+			counter {
+				compatible = "st,stm32-counter"; /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:312 */
+				status = "disabled";             /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:313 */
+			};
+		};
+
+		/* node '/soc/timers@40014800' defined in zephyr/dts/arm/st/f0/stm32f0.dtsi:317 */
+		timers17: timers@40014800 {
+			compatible = "st,stm32-timers"; /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:318 */
+			reg = < 0x40014800 0x400 >;     /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:319 */
+			clocks = < &rcc 0x18 0x40000 >; /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:320 */
+			resets = < &rctl 0x192 >;       /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:321 */
+			interrupts = < 0x16 0x0 >;      /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:322 */
+			interrupt-names = "global";     /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:323 */
+			st,prescaler = < 0x0 >;         /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:324 */
+			status = "disabled";            /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:325 */
+
+			/* node '/soc/timers@40014800/pwm' defined in zephyr/dts/arm/st/f0/stm32f0.dtsi:327 */
+			pwm {
+				compatible = "st,stm32-pwm"; /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:328 */
+				status = "disabled";         /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:329 */
+				#pwm-cells = < 0x3 >;        /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:330 */
+			};
+
+			/* node '/soc/timers@40014800/counter' defined in zephyr/dts/arm/st/f0/stm32f0.dtsi:333 */
+			counter {
+				compatible = "st,stm32-counter"; /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:334 */
+				status = "disabled";             /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:335 */
+			};
+		};
+
+		/* node '/soc/adc@40012400' defined in zephyr/dts/arm/st/f0/stm32f0.dtsi:339 */
+		adc1: adc@40012400 {
+			compatible = "st,stm32-adc";                               /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:340 */
+			reg = < 0x40012400 0x400 >;                                /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:341 */
+			clocks = < &rcc 0x18 0x200 >;                              /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:342 */
+			interrupts = < 0xc 0x0 >;                                  /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:343 */
+			status = "disabled";                                       /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:344 */
+			#io-channel-cells = < 0x1 >;                               /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:345 */
+			resolutions = < 0x60630c 0x51630c 0x42630c 0x33630c >;     /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:346 */
+			sampling-times = < 0x2 0x8 0xe 0x1d 0x2a 0x38 0x48 0xf0 >; /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:350 */
+			num-sampling-time-common-channels = < 0x1 >;               /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:351 */
+			st,adc-sequencer = "NOT_FULLY_CONFIGURABLE";               /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:352 */
+			st,adc-oversampler = "OVERSAMPLER_NONE";                   /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:353 */
+			phandle = < 0x8 >;                                         /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:370 */
+		};
+
+		/* node '/soc/dma@40020000' defined in zephyr/dts/arm/st/f0/stm32f0.dtsi:356 */
+		dma1: dma@40020000 {
+			compatible = "st,stm32-dma-v2bis";                        /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:357 */
+			#dma-cells = < 0x2 >;                                     /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:358 */
+			reg = < 0x40020000 0x400 >;                               /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:359 */
+			clocks = < &rcc 0x14 0x1 >;                               /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:360 */
+			interrupts = < 0x9 0x0 0xa 0x0 0xa 0x0 0xb 0x0 0xb 0x0 >; /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:361 */
+			status = "disabled";                                      /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:362 */
+		};
+	};
+
+	/* node '/cpus' defined in zephyr/dts/arm/st/f0/stm32f0.dtsi:26 */
+	cpus {
+		#address-cells = < 0x1 >; /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:27 */
+		#size-cells = < 0x0 >;    /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:28 */
+
+		/* node '/cpus/cpu@0' defined in zephyr/dts/arm/st/f0/stm32f0.dtsi:30 */
+		cpu0: cpu@0 {
+			device_type = "cpu";          /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:31 */
+			compatible = "arm,cortex-m0"; /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:32 */
+			reg = < 0x0 >;                /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:33 */
+		};
+	};
+
+	/* node '/memory@20000000' defined in zephyr/dts/arm/st/f0/stm32f0.dtsi:37 */
+	sram0: memory@20000000 {
+		compatible = "mmio-sram";    /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:38 */
+		reg = < 0x20000000 0x1000 >; /* in zephyr/dts/arm/st/f0/stm32f030X6.dtsi:12 */
+	};
+
+	/* node '/clocks' defined in zephyr/dts/arm/st/f0/stm32f0.dtsi:41 */
+	clocks {
+
+		/* node '/clocks/clk-hse' defined in zephyr/dts/arm/st/f0/stm32f0.dtsi:42 */
+		clk_hse: clk-hse {
+			#clock-cells = < 0x0 >;            /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:43 */
+			compatible = "st,stm32-hse-clock"; /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:44 */
+			clock-frequency = < 0x7a1200 >;    /* in ../keyboards-firmware/encoder_bridge/boards/others/encoder_bridge/encoder_bridge.dts:18 */
+			status = "okay";                   /* in ../keyboards-firmware/encoder_bridge/boards/others/encoder_bridge/encoder_bridge.dts:19 */
+			phandle = < 0x7 >;                 /* in ../keyboards-firmware/encoder_bridge/boards/others/encoder_bridge/encoder_bridge.dts:25 */
+		};
+
+		/* node '/clocks/clk-hsi' defined in zephyr/dts/arm/st/f0/stm32f0.dtsi:48 */
+		clk_hsi: clk-hsi {
+			#clock-cells = < 0x0 >;         /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:49 */
+			compatible = "fixed-clock";     /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:50 */
+			clock-frequency = < 0x7a1200 >; /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:51 */
+			status = "disabled";            /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:52 */
+		};
+
+		/* node '/clocks/clk-hsi14' defined in zephyr/dts/arm/st/f0/stm32f0.dtsi:55 */
+		clk_hsi14: clk-hsi14 {
+			#clock-cells = < 0x0 >;         /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:56 */
+			compatible = "fixed-clock";     /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:57 */
+			clock-frequency = < 0xd59f80 >; /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:58 */
+			status = "disabled";            /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:59 */
+		};
+
+		/* node '/clocks/clk-lse' defined in zephyr/dts/arm/st/f0/stm32f0.dtsi:62 */
+		clk_lse: clk-lse {
+			#clock-cells = < 0x0 >;            /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:63 */
+			compatible = "st,stm32-lse-clock"; /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:64 */
+			clock-frequency = < 0x8000 >;      /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:65 */
+			driving-capability = < 0x0 >;      /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:66 */
+			status = "disabled";               /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:67 */
+		};
+
+		/* node '/clocks/clk-lsi' defined in zephyr/dts/arm/st/f0/stm32f0.dtsi:70 */
+		clk_lsi: clk-lsi {
+			#clock-cells = < 0x0 >;       /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:71 */
+			compatible = "fixed-clock";   /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:72 */
+			clock-frequency = < 0x9c40 >; /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:73 */
+			status = "disabled";          /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:74 */
+		};
+
+		/* node '/clocks/pll' defined in zephyr/dts/arm/st/f0/stm32f0.dtsi:77 */
+		pll: pll {
+			#clock-cells = < 0x0 >;              /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:78 */
+			compatible = "st,stm32f0-pll-clock"; /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:79 */
+			prediv = < 0x1 >;                    /* in ../keyboards-firmware/encoder_bridge/boards/others/encoder_bridge/encoder_bridge.dts:23 */
+			mul = < 0x6 >;                       /* in ../keyboards-firmware/encoder_bridge/boards/others/encoder_bridge/encoder_bridge.dts:24 */
+			clocks = < &clk_hse >;               /* in ../keyboards-firmware/encoder_bridge/boards/others/encoder_bridge/encoder_bridge.dts:25 */
+			status = "okay";                     /* in ../keyboards-firmware/encoder_bridge/boards/others/encoder_bridge/encoder_bridge.dts:26 */
+			phandle = < 0x3 >;                   /* in ../keyboards-firmware/encoder_bridge/boards/others/encoder_bridge/encoder_bridge.dts:30 */
+		};
+	};
+
+	/* node '/vref' defined in zephyr/dts/arm/st/f0/stm32f0.dtsi:366 */
+	vref: vref {
+		compatible = "st,stm32-vref";      /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:367 */
+		vrefint-cal-addr = < 0x1ffff7ba >; /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:368 */
+		vrefint-cal-mv = < 0xce4 >;        /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:369 */
+		io-channels = < &adc1 0x11 >;      /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:370 */
+		status = "disabled";               /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:371 */
+	};
+
+	/* node '/smbus1' defined in zephyr/dts/arm/st/f0/stm32f0.dtsi:374 */
+	smbus1: smbus1 {
+		compatible = "st,stm32-smbus"; /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:375 */
+		#address-cells = < 0x1 >;      /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:376 */
+		#size-cells = < 0x0 >;         /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:377 */
+		i2c = < &i2c1 >;               /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:378 */
+		status = "disabled";           /* in zephyr/dts/arm/st/f0/stm32f0.dtsi:379 */
+	};
+
+	/* node '/dietemp' defined in zephyr/dts/arm/st/f0/stm32f030.dtsi:14 */
+	die_temp: dietemp {
+		compatible = "st,stm32c0-temp-cal"; /* in zephyr/dts/arm/st/f0/stm32f030.dtsi:15 */
+		ts-cal1-addr = < 0x1ffff7b8 >;      /* in zephyr/dts/arm/st/f0/stm32f030.dtsi:16 */
+		ts-cal1-temp = < 0x1e >;            /* in zephyr/dts/arm/st/f0/stm32f030.dtsi:17 */
+		ts-cal-vrefanalog = < 0xce4 >;      /* in zephyr/dts/arm/st/f0/stm32f030.dtsi:18 */
+		avgslope = "4.3";                   /* in zephyr/dts/arm/st/f0/stm32f030.dtsi:19 */
+		io-channels = < &adc1 0x10 >;       /* in zephyr/dts/arm/st/f0/stm32f030.dtsi:20 */
+		ntc;                                /* in zephyr/dts/arm/st/f0/stm32f030.dtsi:21 */
+		status = "disabled";                /* in zephyr/dts/arm/st/f0/stm32f030.dtsi:22 */
+	};
+
+	/* node '/qdec0' defined in ../keyboards-firmware/encoder_bridge/app.overlay:4 */
+	qdec0: qdec0 {
+		compatible = "gpio-qdec";    /* in ../keyboards-firmware/encoder_bridge/app.overlay:5 */
+		gpios = < &gpioa 0xf 0x10 >,
+		        < &gpiob 0x3 0x10 >; /* in ../keyboards-firmware/encoder_bridge/app.overlay:6 */
+		steps-per-period = < 0x4 >;  /* in ../keyboards-firmware/encoder_bridge/app.overlay:8 */
+		zephyr,axis = < 0x8 >;       /* in ../keyboards-firmware/encoder_bridge/app.overlay:9 */
+		sample-time-us = < 0x7d0 >;  /* in ../keyboards-firmware/encoder_bridge/app.overlay:10 */
+		idle-timeout-ms = < 0xc8 >;  /* in ../keyboards-firmware/encoder_bridge/app.overlay:11 */
+	};
+
+	/* node '/qdec1' defined in ../keyboards-firmware/encoder_bridge/app.overlay:14 */
+	qdec1: qdec1 {
+		compatible = "gpio-qdec";    /* in ../keyboards-firmware/encoder_bridge/app.overlay:15 */
+		gpios = < &gpiob 0x4 0x10 >,
+		        < &gpiob 0x5 0x10 >; /* in ../keyboards-firmware/encoder_bridge/app.overlay:16 */
+		steps-per-period = < 0x4 >;  /* in ../keyboards-firmware/encoder_bridge/app.overlay:18 */
+		zephyr,axis = < 0x6 >;       /* in ../keyboards-firmware/encoder_bridge/app.overlay:19 */
+		sample-time-us = < 0x7d0 >;  /* in ../keyboards-firmware/encoder_bridge/app.overlay:20 */
+		idle-timeout-ms = < 0xc8 >;  /* in ../keyboards-firmware/encoder_bridge/app.overlay:21 */
+	};
+
+	/* node '/qdec2' defined in ../keyboards-firmware/encoder_bridge/app.overlay:24 */
+	qdec2: qdec2 {
+		compatible = "gpio-qdec";    /* in ../keyboards-firmware/encoder_bridge/app.overlay:25 */
+		gpios = < &gpiob 0x6 0x10 >,
+		        < &gpiob 0x7 0x10 >; /* in ../keyboards-firmware/encoder_bridge/app.overlay:26 */
+		steps-per-period = < 0x4 >;  /* in ../keyboards-firmware/encoder_bridge/app.overlay:28 */
+		zephyr,axis = < 0x7 >;       /* in ../keyboards-firmware/encoder_bridge/app.overlay:29 */
+		sample-time-us = < 0x7d0 >;  /* in ../keyboards-firmware/encoder_bridge/app.overlay:30 */
+		idle-timeout-ms = < 0xc8 >;  /* in ../keyboards-firmware/encoder_bridge/app.overlay:31 */
+	};
+
+	/* node '/dir_outputs' defined in ../keyboards-firmware/encoder_bridge/app.overlay:34 */
+	dir_outputs: dir_outputs {
+		compatible = "gpio-leds"; /* in ../keyboards-firmware/encoder_bridge/app.overlay:35 */
+
+		/* node '/dir_outputs/ccw_1' defined in ../keyboards-firmware/encoder_bridge/app.overlay:37 */
+		ccw1: ccw_1 {
+			gpios = < &gpioa 0x4 0x1 >; /* in ../keyboards-firmware/encoder_bridge/app.overlay:38 */
+		};
+
+		/* node '/dir_outputs/cw_1' defined in ../keyboards-firmware/encoder_bridge/app.overlay:40 */
+		cw1: cw_1 {
+			gpios = < &gpioa 0x5 0x1 >; /* in ../keyboards-firmware/encoder_bridge/app.overlay:41 */
+		};
+
+		/* node '/dir_outputs/ccw_2' defined in ../keyboards-firmware/encoder_bridge/app.overlay:43 */
+		ccw2: ccw_2 {
+			gpios = < &gpioa 0x6 0x1 >; /* in ../keyboards-firmware/encoder_bridge/app.overlay:44 */
+		};
+
+		/* node '/dir_outputs/cw_2' defined in ../keyboards-firmware/encoder_bridge/app.overlay:46 */
+		cw2: cw_2 {
+			gpios = < &gpioa 0x7 0x1 >; /* in ../keyboards-firmware/encoder_bridge/app.overlay:47 */
+		};
+
+		/* node '/dir_outputs/ccw_3' defined in ../keyboards-firmware/encoder_bridge/app.overlay:49 */
+		ccw3: ccw_3 {
+			gpios = < &gpiob 0x0 0x1 >; /* in ../keyboards-firmware/encoder_bridge/app.overlay:50 */
+		};
+
+		/* node '/dir_outputs/cw_3' defined in ../keyboards-firmware/encoder_bridge/app.overlay:52 */
+		cw3: cw_3 {
+			gpios = < &gpiob 0x1 0x1 >; /* in ../keyboards-firmware/encoder_bridge/app.overlay:53 */
+		};
+	};
+};
