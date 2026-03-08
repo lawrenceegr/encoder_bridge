@@ -5,7 +5,7 @@
 #include <zephyr/input/input.h>
 #include <string.h>
 
-#define TRIGGER_MS      50
+#define TRIGGER_MS      500
 #define IDLE_TIMEOUT_S  5
 #define NUM_ENCODERS    3
 #define CMD_BUF_SIZE    24
@@ -40,6 +40,19 @@ static uint32_t ccw_counts[NUM_ENCODERS];
 static uint32_t last_event_time;
 static volatile bool sleeping;
 
+/*
+ * Pending encoder event written by the ISR (input_cb) and consumed by
+ * encoder_work_handler.  Mirrors the ZMK ec11 pattern where the ISR only
+ * captures state and posts work; all GPIO configuration happens in the
+ * workqueue context where gpio_pin_configure_dt() is safe to call.
+ */
+static struct {
+	int  idx;
+	int8_t dir; /* +1 = CW, -1 = CCW */
+} pending_enc;
+
+/* ZMK-style: ISR posts, workqueue processes (cf. ec11_work_cb / ec11_thread_cb) */
+static struct k_work encoder_work;
 static struct k_work_delayable trigger_off_work;
 static struct k_timer idle_timer;
 static struct gpio_callback trigger_cb_data;
@@ -57,6 +70,10 @@ static void clear_direction_outputs(void)
 	}
 }
 
+/*
+ * Runs in workqueue context (delayable work) — safe to reconfigure the trigger
+ * pin and re-arm the GPIO interrupt.
+ */
 static void trigger_off_handler(struct k_work *work)
 {
 	clear_direction_outputs();
@@ -66,18 +83,42 @@ static void trigger_off_handler(struct k_work *work)
 	gpio_pin_interrupt_configure_dt(&trigger_gpio, GPIO_INT_EDGE_RISING);
 }
 
-static void signal_trigger(void)
-{
-	gpio_pin_configure_dt(&trigger_gpio, GPIO_OUTPUT_ACTIVE);
-	gpio_pin_set_dt(&trigger_gpio, 1);
-	k_work_reschedule(&trigger_off_work, K_MSEC(TRIGGER_MS));
-}
-
 static void set_direction(const struct gpio_dt_spec *active,
 			  const struct gpio_dt_spec *inactive)
 {
 	gpio_pin_set_dt(inactive, 0);
 	gpio_pin_set_dt(active, 1);
+}
+
+/*
+ * encoder_work_handler — ZMK equivalent of ec11_thread_cb / ec11_work_cb.
+ *
+ * All GPIO configuration (gpio_pin_configure_dt) must happen here rather than
+ * in the ISR, because gpio_pin_configure_dt is not guaranteed to be ISR-safe
+ * on STM32 (it manipulates MODER/OTYPER/PUPDR registers).
+ *
+ * Pattern mirrored from ZMK ec11_trigger.c:
+ *   ISR  → setup_int(false) + k_work_submit(&drv_data->work)
+ *   work → handler(dev, trigger) + setup_int(true)
+ */
+static void encoder_work_handler(struct k_work *work)
+{
+	int idx = pending_enc.idx;
+	int8_t dir = pending_enc.dir;
+
+	/* Set direction outputs (gpio_pin_set_dt is ISR-safe, but doing it
+	 * here keeps all GPIO operations together and avoids tearing between
+	 * direction and trigger when events arrive back-to-back). */
+	if (dir > 0) {
+		set_direction(&cw_gpios[idx], &ccw_gpios[idx]);
+	} else {
+		set_direction(&ccw_gpios[idx], &cw_gpios[idx]);
+	}
+
+	/* Assert trigger.  gpio_pin_configure_dt is safe here (workqueue). */
+	gpio_pin_configure_dt(&trigger_gpio, GPIO_OUTPUT_ACTIVE);
+	gpio_pin_set_dt(&trigger_gpio, 1);
+	k_work_reschedule(&trigger_off_work, K_MSEC(TRIGGER_MS));
 }
 
 static int encoder_index(const struct device *dev)
@@ -90,6 +131,13 @@ static int encoder_index(const struct device *dev)
 	return -1;
 }
 
+/*
+ * input_cb — ZMK equivalent of ec11_a_gpio_callback / ec11_b_gpio_callback.
+ *
+ * With CONFIG_INPUT_MODE_SYNCHRONOUS=y this runs in ISR context, so it must
+ * stay minimal: record the event, update counters/timers, then post work.
+ * No gpio_pin_configure_dt calls here.
+ */
 static void input_cb(struct input_event *evt, void *user_data)
 {
 	if (evt->type != INPUT_EV_REL) {
@@ -107,14 +155,19 @@ static void input_cb(struct input_event *evt, void *user_data)
 	if (evt->value > 0) {
 		cw_counts[idx]++;
 		printk("Enc %d: CW t=%u\n", idx, last_event_time);
-		set_direction(&cw_gpios[idx], &ccw_gpios[idx]);
+		pending_enc.idx = idx;
+		pending_enc.dir = 1;
 	} else if (evt->value < 0) {
 		ccw_counts[idx]++;
 		printk("Enc %d: CCW t=%u\n", idx, last_event_time);
-		set_direction(&ccw_gpios[idx], &cw_gpios[idx]);
+		pending_enc.idx = idx;
+		pending_enc.dir = -1;
+	} else {
+		return;
 	}
 
-	signal_trigger();
+	/* Like ZMK's k_work_submit(&drv_data->work) in ec11_a_gpio_callback */
+	k_work_submit(&encoder_work);
 }
 
 INPUT_CALLBACK_DEFINE(NULL, input_cb, NULL);
@@ -126,6 +179,15 @@ static void idle_timer_expiry(struct k_timer *timer)
 	k_sem_give(&idle_sem);
 }
 
+/*
+ * trigger_isr — called when the external device drives the trigger pin HIGH
+ * (used as a wake signal).  This is a real ISR so it must only perform
+ * ISR-safe operations: read flags, start timers, give semaphores.
+ *
+ * Do NOT call gpio_pin_configure_dt from here.  The original code called
+ * signal_trigger() which reconfigured the pin as an output — unsafe in ISR
+ * and would also fight the external device driving the same wire.
+ */
 static void trigger_isr(const struct device *dev, struct gpio_callback *cb,
 			 uint32_t pins)
 {
@@ -134,7 +196,6 @@ static void trigger_isr(const struct device *dev, struct gpio_callback *cb,
 		printk("Wake t=%u\n", k_uptime_get_32());
 	}
 	k_timer_start(&idle_timer, K_SECONDS(IDLE_TIMEOUT_S), K_NO_WAIT);
-	signal_trigger();
 }
 
 static void process_cmd(const char *cmd)
@@ -227,6 +288,8 @@ int main(void)
 		return -1;
 	}
 
+	/* ZMK-style work init (cf. k_work_init(&drv_data->work, ec11_work_cb)) */
+	k_work_init(&encoder_work, encoder_work_handler);
 	k_work_init_delayable(&trigger_off_work, trigger_off_handler);
 	k_timer_init(&idle_timer, idle_timer_expiry, NULL);
 	k_timer_start(&idle_timer, K_SECONDS(IDLE_TIMEOUT_S), K_NO_WAIT);

@@ -56,6 +56,6 @@ cmake:
     zephyr-base: '/home/marcus/zephyrproject/zephyr'
 version: '0.1.0'
 west:
-  command: '/home/marcus/zephyrproject/.venv/bin/west build -b encoder_bridge . -p'
+  command: '/home/marcus/zephyrproject/.venv/bin/west build -b encoder_bridge . p'
   topdir: '/home/marcus/zephyrproject'
   version: '1.4.0'

@@ -11,6 +11,8 @@ direction pulses to a host system.
 - **Outputs**: 6x direction GPIOs (CW/CCW per encoder), active-high 10ms pulses
 - **Trigger**: PA11, bidirectional — activity indicator to host + EXTI wake input
 - **Console**: USART1 on PA9/PA10, 115200 baud
+### Schematics
+![alt text](doc/image.png)
 
 ### GPIO Map
 
@@ -61,7 +63,7 @@ encoder_bridge/
 ### Build
 
 ```sh
-cd /home/user/keyboards-firmware/encoder_bridge
+cd /home/marcus/keyboards-firmware/encoder_bridge
 source /home/marcus/zephyrproject/.venv/bin/activate
 source /home/marcus/zephyrproject/zephyr/zephyr-env.sh
 
